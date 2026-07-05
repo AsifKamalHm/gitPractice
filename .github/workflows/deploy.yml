@@ -1,0 +1,30 @@
+name:  Reusable Deployment Engine
+on:
+    workflow_dispatch:
+    push:
+jobs:
+    run-unit-test:
+        runs-on: ubuntu-latest
+        steps: 
+        - name: execute unit test
+          run: |
+              echo "Running unit tests..."
+              echo "All unit tests passed successfully."
+
+    build-pyment-artifact:
+        runs-on: ubuntu-latest
+        needs: 
+            - run-unit-test
+        steps: 
+        - name: execute unit test
+          run: |
+              echo "Building payment artifact..."
+              echo "Payment artifact built successfully."
+    deploy-application-job:
+        needs:
+            - build-pyment-artifact
+        uses: ./.github/workflows/payment-resuable-workflow.yml
+        with:
+            application_name: "Payment Service"
+            run_security_scan: true
+            replicas: 3

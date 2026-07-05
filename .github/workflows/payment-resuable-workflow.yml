@@ -1,0 +1,37 @@
+name: Payment resueable workflow
+on:
+  workflow_call:
+    inputs:
+      application_name:
+        required: true
+        type: string
+      run_security_scan:
+        required: true
+        type: boolean
+      replicas:
+        required: true
+        type: number
+
+jobs:
+  deploy-application-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display Deployment Parameters
+        run: |
+          echo "Application Name: ${{ inputs.application_name }}"
+          echo "Target Replicas: ${{ inputs.replicas }}"
+
+      - name: Security Validation
+        if: inputs.run_security_scan # Corrected: No ${{ }} wrappers here
+        run: |
+          echo "Running security scan..."
+          echo "No critical vulnerabilities found."
+
+      - name: Deploy Application
+        run: |
+          echo "Deploying ${{ inputs.application_name }}..."
+          echo "Setting up desired replicas: ${{ inputs.replicas }}"
+
+      - name: Deployment Complete
+        run: |
+          echo "Deployment completed successfully."
