@@ -1,0 +1,39 @@
+name: resuable-workflow-out
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+      age:
+        required: true
+        type: number
+      city:
+        required: true
+        type: string
+    outputs:
+      name:
+        description: "name of the user"
+        value: ${{ jobs.reusable-workflow-out.outputs.name }} # Fixed: Pointed to jobs
+      age:
+        description: "age of the user"
+        value: ${{ jobs.reusable-workflow-out.outputs.age }}  # Fixed: Pointed to jobs
+      city:
+        description: "name of the city"
+        value: ${{ jobs.reusable-workflow-out.outputs.city }} # Fixed: Pointed to jobs
+
+jobs:
+  reusable-workflow-out:
+    runs-on: ubuntu-latest
+    outputs:
+      name: ${{ steps.print-inputs.outputs.name }}
+      age: ${{ steps.print-inputs.outputs.age }}
+      city: ${{ steps.print-inputs.outputs.city }}
+    steps:
+      - name: Print inputs
+        id: print-inputs # Fixed: Moved id to the step level
+        run: |
+          # Fixed: Corrected string quoting and key=value formatting
+          echo "name=${{ inputs.name }}" >> $GITHUB_OUTPUT
+          echo "age=${{ inputs.age }}" >> $GITHUB_OUTPUT
+          echo "city=${{ inputs.city }}" >> $GITHUB_OUTPUT

@@ -1,0 +1,19 @@
+name: caller wofkflow
+on:
+    workflow_dispatch:
+jobs:
+    call-resuable:
+        uses: ./github/workflows/resuable-workflow-out.yml
+        with:
+            name: "John Doe"
+            age: 30
+            city: "New York"
+    consume-outputs:
+        needs: call-resuable
+        runs-on: ubuntu-Latest
+        steps:
+            - name: Print outputs
+              run: |
+                echo "Name: ${{ needs.call-resuable.outputs.name }}"
+                echo "Age: ${{ needs.call-resuable.outputs.age }}"
+                echo "City: ${{ needs.call-resuable.outputs.city }}"
