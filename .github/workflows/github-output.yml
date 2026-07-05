@@ -21,4 +21,13 @@ jobs:
             echo "sending deployment url notification..."
             echo "Deployment URL: ${{ steps.deploy.outputs.deployment_url }}"
             echo "deployment notification sent successfully!"
-            
+        outputs:
+            deployment_url: ${{ steps.deploy.outputs.deployment_url }}
+    notification-job:
+        needs: deployment-job
+        runs-on: ubuntu-latest
+        steps:
+           - name: outputing job output notification
+             run: |
+                echo "sending deployment notification ..."
+                echo "job output deployement url: ${{ needs.deployment-job.outputs.deployment_url }}"
