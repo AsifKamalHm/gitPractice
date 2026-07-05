@@ -4,7 +4,7 @@ on:
 
 jobs:
   call-reusable: # Fixed spelling typo
-    uses: ./.github/workflows/reusable-workflow-out.yml
+    uses: ./.github/workflows/resuable-workflow-out.yml
     with:
       name: "John Doe"
       age: 30
