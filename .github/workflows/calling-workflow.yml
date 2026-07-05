@@ -3,7 +3,7 @@ on:
     workflow_dispatch:
 jobs:
     call-resuable:
-        uses: ./github/workflows/resuable-workflow-out.yml
+        uses: ./.github/workflows/reusable-workflow-out.yml
         with:
             name: "John Doe"
             age: 30
