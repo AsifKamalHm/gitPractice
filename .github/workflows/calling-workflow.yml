@@ -1,19 +1,21 @@
-name: caller wofkflow
+name: caller workflow
 on:
-    workflow_dispatch:
+  workflow_dispatch:
+
 jobs:
-    call-resuable:
-        uses: ./.github/workflows/reusable-workflow-out.yml
-        with:
-            name: "John Doe"
-            age: 30
-            city: "New York"
-    consume-outputs:
-        needs: call-resuable
-        runs-on: ubuntu-Latest
-        steps:
-            - name: Print outputs
-              run: |
-                echo "Name: ${{ needs.call-resuable.outputs.name }}"
-                echo "Age: ${{ needs.call-resuable.outputs.age }}"
-                echo "City: ${{ needs.call-resuable.outputs.city }}"
+  call-reusable: # Fixed spelling typo
+    uses: ./.github/workflows/reusable-workflow-out.yml
+    with:
+      name: "John Doe"
+      age: 30
+      city: "New York"
+
+  consume-outputs:
+    needs: call-reusable # Matches the fixed job name above
+    runs-on: ubuntu-latest # Fixed: Changed to lowercase 'latest'
+    steps:
+      - name: Print outputs
+        run: |
+          echo "Name: ${{ needs.call-reusable.outputs.name }}"
+          echo "Age: ${{ needs.call-reusable.outputs.age }}"
+          echo "City: ${{ needs.call-reusable.outputs.city }}"
