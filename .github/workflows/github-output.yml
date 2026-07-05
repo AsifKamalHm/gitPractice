@@ -1,0 +1,24 @@
+name: github outs
+on:
+  workflow_dispatch:
+
+
+jobs:
+    deployment-job:
+        runs-on: ubuntu-latest
+        steps:
+        - name: deploy application
+          id: deploy
+          run: |
+              echo "Deploying application..."
+              sleep 5
+              echo "deployment_url=https://localhost:8080" >> $GITHUB_OUTPUT
+        - name: dispaly the deployment url
+          run: |
+              echo "Deployment URL: ${{ steps.deploy.outputs.deployment_url }}"
+        - name: send deployment url notification
+          run: |
+            echo "sending deployment url notification..."
+            echo "Deployment URL: ${{ steps.deploy.outputs.deployment_url }}"
+            echo "deployment notification sent successfully!"
+            
