@@ -53,3 +53,17 @@ jobs:
         path: |
           smoke-test.log
           container-logs.txt
+  review-job:
+    runs-on: ubuntu-Latest
+    needs: flask-build-test-job
+    steps: 
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flask-artifacts-file
+      - name: review the artificats
+        run: |
+          echo "=========smoke-test.log========="
+          cat smoke-test.log
+          echo "=========container-logs.txt========="
+          cat container-logs.txt
