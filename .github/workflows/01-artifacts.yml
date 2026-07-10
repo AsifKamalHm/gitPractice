@@ -1,0 +1,56 @@
+name: 01 - artifacts Demo
+
+on:
+  workflow_dispatch:
+  
+env:
+  APPLICATION_NAME: flask-application
+  DOCKER_USERNAME: githubactions12
+
+jobs:
+
+  flask-build-test-job:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - name: Generate Dynamic docker image tag
+      run: echo "IMAGE_TAG=v${ GITHUB_RUN_NUMBER }-${GITHUB_SHA::7}" >> $GITHUB_ENV 
+  
+    - name: Login to Docker Hub
+      uses: docker/login-action@v4
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.TOKEN }}
+    - name: Build and push
+      uses: docker/build-push-action@v7
+      with:
+        context: ./app
+        push: false
+        tags: ${{ env.DOCKER_USERNAME }}/${{ env.APPLICATION_NAME }}:${ env.IMAGE_TAG }
+    - name: Run Container
+      run: |
+        docker run -d \
+          -p 5000:5000 \
+          --name flask-container \
+          $DOCKER_USERNAME/$APPLICATION_NAME:$IMAGE_TAG
+
+    - name: Genrate Smoke Test Application
+      run: |
+        sleep 5
+        curl  http://localhost:5000 > smoke-test.log
+        curl --fail http://localhost:5000/health >> smoke-test.log
+
+    - name: Export Smoke Test Log
+      run: |
+        echo "Exporting smoke test Log as log file"
+        docker logs $DOCKER_USERNAME/$APPLICATION_NAME:$IMAGE_TAG >> container-logs.txt
+    
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: flask-artifacts-file
+        path: |
+          smoke-test.log
+          container-logs.txt
