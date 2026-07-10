@@ -44,7 +44,7 @@ jobs:
     - name: Export Smoke Test Log
       run: |
         echo "Exporting smoke test Log as log file"
-        docker logs $DOCKER_USERNAME/$APPLICATION_NAME:$IMAGE_TAG >> container-logs.txt
+        docker logs flask-container >> container-logs.txt
     
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v7
